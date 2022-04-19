@@ -35,6 +35,7 @@ namespace backend.Controllers
             var client = new User();
             client.EmailAddress = clientViewModel.EmailAddress;
             client.Role = clientViewModel.Role;
+            client.ShelterId = clientViewModel.ShelterId;
 
             try
             {
@@ -88,6 +89,12 @@ namespace backend.Controllers
             return _clientRepository.GetUser(id).LovedPets.Select(lp => lp.Pet).ToList();
         }
 
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public User Client(Guid id)
+        {
+            return _clientRepository.GetUser(id);
+        }
         //[AllowAnonymous]
         //[HttpGet("{clientId}")]
         //public IActionResult GetCustomerReservations(Guid customerId)

@@ -12,5 +12,7 @@ namespace backend.Models
         public string Password { get; set; }
 
         public Role Role { get; set; }
+
+        public Guid? ShelterId { get; set; }
     }
 }
