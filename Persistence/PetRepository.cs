@@ -42,10 +42,11 @@ namespace backend.Persistence
             return petsFromDB;
         }
 
-        public void CreatePet(Pet pet)
+        public Pet CreatePet(Pet pet)
         {
             var petWthId =_dbContext.Pets.Add(pet);
             _dbContext.SaveChanges();
+            return petWthId.Entity;
         }
 
         public void UpdatePet(Pet pet)

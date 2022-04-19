@@ -9,7 +9,7 @@ namespace backend.Persistence
     {
         IEnumerable<Pet> GetPets(PetsQueryModel petsQueryModel);
         Pet GetPet(Guid petId);
-        void CreatePet(Pet pet);
+        Pet CreatePet(Pet pet);
         void DeletePet(Guid id);
         void UpdatePet(Pet pet);
     }

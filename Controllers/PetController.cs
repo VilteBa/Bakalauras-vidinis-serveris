@@ -66,8 +66,8 @@ namespace backend.Controllers
         [HttpPost]
         public IActionResult CreatePet([FromBody] Pet pet)
         {
-            _petRepository.CreatePet(pet);
-            return Ok();
+            var createdPet = _petRepository.CreatePet(pet);
+            return Ok(createdPet);
         }
 
         [HttpDelete("{id}")]

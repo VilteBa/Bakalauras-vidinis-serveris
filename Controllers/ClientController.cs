@@ -9,6 +9,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace backend.Controllers
 {
@@ -76,6 +78,14 @@ namespace backend.Controllers
                 client.PhoneNumber,
                 Token = tokenString
             });
+        }
+
+        // todo: sutvarkyt tuos anonymous
+        [AllowAnonymous]
+        [HttpGet("{id}/lovedPets")]
+        public List<Pet> GetPetsLoved(Guid id)
+        {
+            return _clientRepository.GetUser(id).LovedPets.Select(lp => lp.Pet).ToList();
         }
 
         //[AllowAnonymous]
