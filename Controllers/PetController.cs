@@ -102,6 +102,14 @@ namespace backend.Controllers
             return _petRepository.GetPet(petId);
         }
 
+        [HttpGet("Editable")]
+        public Boolean IsEditableByUser(Guid petId, Guid userId)
+        {
+            var user = _dbContext.Users.SingleOrDefault(u => u.UserId == userId);
+            var pet = _petRepository.GetPet(petId);
+            return user.ShelterId==pet.ShelterId;
+        }
+
         //[HttpPost]
         //public IActionResult Post()
         //{
