@@ -30,6 +30,12 @@ namespace backend.Controllers
             return _shelterRepository.GetShelter(id);
         }
 
+        [HttpGet("Pets/{id}")]
+        public List<Pet> GetShelterPets(Guid id)
+        {
+            return _shelterRepository.GetShelter(id).Pets.ToList();
+        }
+
         [HttpPost]
         public IActionResult CreateShelter([FromBody] Shelter shelter)
         {

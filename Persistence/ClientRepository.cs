@@ -1,8 +1,6 @@
 ﻿using backend.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace backend.Persistence
@@ -97,7 +95,7 @@ namespace backend.Persistence
                 return false;
             }
         }
-
+      
         public User GetUser(Guid userId)
         {
             return _dbContext.Users.Include(u => u.Pets).SingleOrDefault(user => user.UserId == userId);
