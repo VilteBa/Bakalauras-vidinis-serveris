@@ -50,5 +50,12 @@ namespace backend.Controllers
             return Ok();
         }
 
+        [HttpPatch]
+        public IActionResult UpdateShelter(Shelter shelter)
+        {
+            _shelterRepository.UpdateShelter(shelter);
+            return Ok();
+        }
+
     }
 }

@@ -42,5 +42,12 @@ namespace backend.Persistence
             _dbContext.Shelters.Remove(shelter ?? throw new InvalidOperationException());
             _dbContext.SaveChanges();
         }
+
+        public void UpdateShelter(Shelter shelter)
+        {
+            var shelterToUpdate = _dbContext.Shelters.SingleOrDefault(p => p.ShelterId == shelter.ShelterId);
+            _dbContext.Entry(shelterToUpdate).CurrentValues.SetValues(shelter);
+            _dbContext.SaveChanges();
+        }
     }
 }

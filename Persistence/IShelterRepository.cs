@@ -9,6 +9,7 @@ namespace backend.Persistence
     {
         IEnumerable<Shelter> GetShelters(SheltersQueryModel sheltersQueryModel);
         Shelter GetShelter(Guid id);
+        void UpdateShelter(Shelter shelter);
         void CreateShelter(Shelter shelter);
         void DeleteShelter(Guid id);
     }
