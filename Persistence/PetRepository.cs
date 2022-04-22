@@ -32,10 +32,11 @@ namespace backend.Persistence
 
         public IEnumerable<Pet> GetPets(PetsQueryModel petsQueryModel)
         {
-            var petsFromDB = _dbContext.Pets.AsQueryable()
+            var petsFromDB = _dbContext.Pets
                 .FilterBySize(petsQueryModel.Sizes)
                 .FilterBySex(petsQueryModel.Sexes)
                 .FilterByType(petsQueryModel.Types)
+                .FilterByColor(petsQueryModel.Colors)
                 .Skip(petsQueryModel.Page * petsQueryModel.PageLimit)
                 .Take(petsQueryModel.PageLimit);
 

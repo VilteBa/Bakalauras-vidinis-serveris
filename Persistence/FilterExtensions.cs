@@ -8,7 +8,7 @@ namespace backend.Persistence
 {
     public static class FilterExtensions
     {
-        public static IQueryable<Pet> FilterBySize(this IQueryable<Pet> pets, string[] sizes)
+        public static IEnumerable<Pet> FilterBySize(this IEnumerable<Pet> pets, string[] sizes)
         {
             if(sizes?.Any(x => !string.IsNullOrEmpty(x)) == true)
             {
@@ -18,7 +18,7 @@ namespace backend.Persistence
             return pets;
         }
         //gal kitaip?
-        public static IQueryable<Pet> FilterBySex(this IQueryable<Pet> pets, string[] sexes)
+        public static IEnumerable<Pet> FilterBySex(this IEnumerable<Pet> pets, string[] sexes)
         {
             if(sexes?.Any(x => !string.IsNullOrEmpty(x)) == true)
             {
@@ -28,7 +28,7 @@ namespace backend.Persistence
             return pets;
         }
 
-        public static IQueryable<Pet> FilterByType(this IQueryable<Pet> pets, string[] types)
+        public static IEnumerable<Pet> FilterByType(this IEnumerable<Pet> pets, string[] types)
         {
             if(types?.Any(x => !string.IsNullOrEmpty(x)) == true)
             {
@@ -38,7 +38,17 @@ namespace backend.Persistence
             return pets;
         }
 
-        public static IQueryable<Shelter> FilterByCity(this IQueryable<Shelter> shelters, string[] cities)
+        public static IEnumerable<Pet> FilterByColor(this IEnumerable<Pet> pets, string[] colors)
+        {
+            if (colors?.Any(x => !string.IsNullOrEmpty(x)) == true)
+            {
+                pets = pets.Where(x => colors.Contains(x.Color.ToString()));
+            }
+
+            return pets;
+        }
+
+        public static IEnumerable<Shelter> FilterByCity(this IEnumerable<Shelter> shelters, string[] cities)
         {
             if(cities?.Any(x => !string.IsNullOrEmpty(x)) == true)
             {
