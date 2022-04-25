@@ -8,9 +8,11 @@ namespace backend.Persistence
     public interface IShelterRepository
     {
         IEnumerable<Shelter> GetShelters(SheltersQueryModel sheltersQueryModel);
+        IEnumerable<string> GetShelterCities();
         Shelter GetShelter(Guid id);
         void UpdateShelter(Shelter shelter);
         void CreateShelter(Shelter shelter);
         void DeleteShelter(Guid id);
+        int CountShelters(SheltersQueryModel sheltersQueryModel);
     }
 }

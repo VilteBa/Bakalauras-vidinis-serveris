@@ -24,6 +24,12 @@ namespace backend.Controllers
             return _shelterRepository.GetShelters(sheltersQueryModel);
         }
 
+        [HttpGet("Count")]
+        public IActionResult CountShelters([FromQuery] SheltersQueryModel sheltersQueryModel)
+        {
+            return Ok(_shelterRepository.CountShelters(sheltersQueryModel));
+        }
+
         [HttpGet("{id}")]
         public Shelter GetShelter(Guid id)
         {
@@ -34,6 +40,12 @@ namespace backend.Controllers
         public List<Pet> GetShelterPets(Guid id)
         {
             return _shelterRepository.GetShelter(id).Pets.ToList();
+        }
+
+        [HttpGet("Cities")]
+        public IEnumerable<string> GetShelterCities()
+        {
+            return _shelterRepository.GetShelterCities();
         }
 
         [HttpPost]

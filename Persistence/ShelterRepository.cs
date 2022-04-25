@@ -25,6 +25,13 @@ namespace backend.Persistence
                 .Take(sheltersQueryModel.PageLimit);
         }
 
+        public int CountShelters(SheltersQueryModel sheltersQueryModel)
+        {
+            return _dbContext.Shelters.AsQueryable()
+                .FilterByCity(sheltersQueryModel.Cities)
+                .Count();
+        }
+
         Shelter IShelterRepository.GetShelter(Guid id)
         {
             return _dbContext.Shelters.Include(s => s.Pets).SingleOrDefault(shelter => shelter.ShelterId == id);
@@ -41,6 +48,10 @@ namespace backend.Persistence
             var shelter = _dbContext.Shelters.SingleOrDefault(shelter => shelter.ShelterId == id);
             _dbContext.Shelters.Remove(shelter ?? throw new InvalidOperationException());
             _dbContext.SaveChanges();
+        }
+        public IEnumerable<string> GetShelterCities() 
+        {
+            return _dbContext.Shelters.Select(x => x.City).Distinct();
         }
 
         public void UpdateShelter(Shelter shelter)
