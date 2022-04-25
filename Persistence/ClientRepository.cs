@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace backend.Persistence
 {
@@ -95,10 +96,17 @@ namespace backend.Persistence
                 return false;
             }
         }
-      
+
         public User GetUser(Guid userId)
         {
             return _dbContext.Users.Include(u => u.Pets).SingleOrDefault(user => user.UserId == userId);
+        }
+
+        public void Update(User user)
+        {
+            var userToUpdate = _dbContext.Users.SingleOrDefault(p => p.UserId == user.UserId);
+            _dbContext.Entry(userToUpdate).CurrentValues.SetValues(user);
+            _dbContext.SaveChanges();
         }
     }
 }

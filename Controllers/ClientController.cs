@@ -87,6 +87,14 @@ namespace backend.Controllers
         public List<Pet> GetPetsLoved(Guid id)
         {
             return _clientRepository.GetUser(id).LovedPets.Select(lp => lp.Pet).ToList();
+        }      // todo: sutvarkyt tuos anonymous
+
+        [AllowAnonymous]
+        [HttpPatch()]
+        public IActionResult UpdateUser(User user)
+        {
+            _clientRepository.Update(user);
+            return Ok();
         }
 
         [AllowAnonymous]

@@ -98,16 +98,34 @@ namespace backend.Controllers
             return _petRepository.GetPet(id).LovedPets.Select(lp => lp.User).ToList();
         }
 
-        [HttpPut("lovePet")]
+        [HttpPut("LovePet")]
         public Pet AddLovedPet(Guid petId, Guid userId)
         {
             var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
             var petToAdd = _petRepository.GetPet(petId);
             user.LovedPets.Add(new LovedPets() { User = user, Pet = petToAdd});
-            //_dbContext.Update(user);
             _dbContext.SaveChanges();
             return _petRepository.GetPet(petId);
         }
+
+        [HttpDelete("UnlovePet")]
+        public IActionResult DeleteLovedPet(Guid petId, Guid userId)
+        {
+            var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
+            var lovedPet = user.LovedPets.SingleOrDefault(x => x.UserId == userId && x.PetId==petId);
+            user.LovedPets.Remove(lovedPet);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+
+        [HttpGet("isLovedPet")]
+        public IActionResult IsLovedPet(Guid petId, Guid userId)
+        {
+            var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
+            var isLovedPet = user.LovedPets.Any(x => x.UserId == userId && x.PetId == petId);
+            return Ok(isLovedPet);
+        }
+
 
         [HttpGet("Editable")]
         public Boolean IsEditableByUser(Guid petId, Guid userId)
