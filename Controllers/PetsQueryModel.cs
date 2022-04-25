@@ -29,5 +29,7 @@ namespace backend.Controllers
         public string[] Types { get; set; }
 
         public string[] Colors { get; set; }
+
+        public string[] Cities { get; set; }
     }
 }

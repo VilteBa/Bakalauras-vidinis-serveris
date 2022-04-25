@@ -33,10 +33,13 @@ namespace backend.Persistence
         public IEnumerable<Pet> GetPets(PetsQueryModel petsQueryModel)
         {
             var petsFromDB = _dbContext.Pets
+                .Include(x => x.Shelter)
+                .FilterByCity(petsQueryModel.Cities)
                 .FilterBySize(petsQueryModel.Sizes)
                 .FilterBySex(petsQueryModel.Sexes)
                 .FilterByType(petsQueryModel.Types)
                 .FilterByColor(petsQueryModel.Colors)
+                .FilterByAge(petsQueryModel.MinAge, petsQueryModel.MaxAge)
                 .Skip(petsQueryModel.Page * petsQueryModel.PageLimit)
                 .Take(petsQueryModel.PageLimit);
 
@@ -64,6 +67,7 @@ namespace backend.Persistence
                  .FilterBySex(petsQueryModel.Sexes)
                  .FilterByType(petsQueryModel.Types)
                  .FilterByColor(petsQueryModel.Colors)
+                 .FilterByAge(petsQueryModel.MinAge, petsQueryModel.MaxAge)
                  .Count();
         }
     }

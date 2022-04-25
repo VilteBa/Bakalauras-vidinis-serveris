@@ -17,12 +17,21 @@ namespace backend.Persistence
 
             return pets;
         }
-        //gal kitaip?
+        
         public static IEnumerable<Pet> FilterBySex(this IEnumerable<Pet> pets, string[] sexes)
         {
             if(sexes?.Any(x => !string.IsNullOrEmpty(x)) == true)
             {
                 pets = pets.Where(x => sexes.Contains(x.Sex.ToString()));
+            }
+
+            return pets;
+        }
+        public static IEnumerable<Pet> FilterByCity(this IEnumerable<Pet> pets, string[] cities)
+        {
+            if (cities?.Any(x => !string.IsNullOrEmpty(x)) == true)
+            {
+                pets = pets.Where(x => cities.Contains(x.Shelter.City.ToString()));
             }
 
             return pets;
@@ -43,6 +52,15 @@ namespace backend.Persistence
             if (colors?.Any(x => !string.IsNullOrEmpty(x)) == true)
             {
                 pets = pets.Where(x => colors.Contains(x.Color.ToString()));
+            }
+
+            return pets;
+        }
+        public static IEnumerable<Pet> FilterByAge(this IEnumerable<Pet> pets, int min, int max)
+        {
+            if (max>min)
+            {
+                pets = pets.Where(x => min<=x.Years && x.Years<max);
             }
 
             return pets;
