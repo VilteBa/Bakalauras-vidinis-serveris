@@ -51,6 +51,13 @@ namespace backend.Controllers
             return _petRepository.GetPets(petsQueryModel);
         }
 
+
+        [HttpGet("Count")]
+        public IActionResult CountPets([FromQuery] PetsQueryModel petsQueryModel)
+        {
+            return Ok(_petRepository.CountPets(petsQueryModel));
+        }
+
         [HttpGet("{id}")]
         public Pet GetPet(Guid id)
         {

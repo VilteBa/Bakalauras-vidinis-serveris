@@ -56,5 +56,15 @@ namespace backend.Persistence
             _dbContext.Entry(petToUpdate).CurrentValues.SetValues(pet);
             _dbContext.SaveChanges();
         }
+
+        public int CountPets(PetsQueryModel petsQueryModel)
+        {
+            return _dbContext.Pets
+                 .FilterBySize(petsQueryModel.Sizes)
+                 .FilterBySex(petsQueryModel.Sexes)
+                 .FilterByType(petsQueryModel.Types)
+                 .FilterByColor(petsQueryModel.Colors)
+                 .Count();
+        }
     }
 }

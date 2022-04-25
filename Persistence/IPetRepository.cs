@@ -8,6 +8,7 @@ namespace backend.Persistence
     public interface IPetRepository
     {
         IEnumerable<Pet> GetPets(PetsQueryModel petsQueryModel);
+        int CountPets(PetsQueryModel petsQueryModel);
         Pet GetPet(Guid petId);
         Pet CreatePet(Pet pet);
         void DeletePet(Guid id);
