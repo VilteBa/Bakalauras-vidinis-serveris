@@ -32,5 +32,8 @@ namespace backend.Models
         [JsonIgnore]
         public virtual ICollection<LovedPets> LovedPets { get; set; }
 
+        [JsonIgnore]
+        public virtual ICollection<Reservation> Reservations { get; set; }
+
     }
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace backend.Persistence
 {
-    public class PetRepository: IPetRepository
+    public class PetRepository : IPetRepository
     {
         private readonly DBContext _dbContext;
 
@@ -48,7 +48,7 @@ namespace backend.Persistence
 
         public Pet CreatePet(Pet pet)
         {
-            var petWthId =_dbContext.Pets.Add(pet);
+            var petWthId = _dbContext.Pets.Add(pet);
             _dbContext.SaveChanges();
             return petWthId.Entity;
         }

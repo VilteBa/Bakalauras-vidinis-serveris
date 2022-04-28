@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace backend.Persistence
 {
-    public class ShelterRepository: IShelterRepository
+    public class ShelterRepository : IShelterRepository
     {
         private readonly DBContext _dbContext;
 
@@ -38,7 +38,7 @@ namespace backend.Persistence
         }
 
         public void CreateShelter(Shelter shelter)
-        {//todo: if not exists
+        {
             _dbContext.Shelters.Add(shelter);
             _dbContext.SaveChanges();
         }

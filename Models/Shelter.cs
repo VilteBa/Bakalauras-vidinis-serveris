@@ -26,5 +26,8 @@ namespace backend.Models
 
         [JsonIgnore]
         public virtual ICollection<User> Users { get; set; }// todo: pabandyt be virtual
+
+        [JsonIgnore]
+        public virtual ICollection<Reservation> Reservations { get; set; }
     }
 }

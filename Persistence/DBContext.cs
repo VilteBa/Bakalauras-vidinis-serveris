@@ -15,6 +15,8 @@ namespace backend.Persistence
 
         public DbSet<Shelter> Shelters { get; set; }
 
+        public DbSet<Reservation> Reservations { get; set; }
+
         public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,6 +33,18 @@ namespace backend.Persistence
                 .HasMany(s => s.Users)
                 .WithOne(p => p.Shelter)
                 .HasForeignKey(p => p.ShelterId);
+
+            // Prieglauda turi daug rezervaciju
+            modelBuilder.Entity<Shelter>()
+                .HasMany(s => s.Reservations)
+                .WithOne(p => p.Shelter)
+                .HasForeignKey(p => p.ShelterId);
+
+            // Vartotojas turi daug rezervaciju
+            modelBuilder.Entity<User>()
+                .HasMany(s => s.Reservations)
+                .WithOne(p => p.User)
+                .HasForeignKey(p => p.UserId);
 
             // gyvunai pamegti vartotoju
             modelBuilder.Entity<User>()
@@ -49,20 +63,6 @@ namespace backend.Persistence
                 {
                     j.HasKey(t => new { t.PetId, t.UserId });
                 });
-
-
-            //modelBuilder.Entity<LovedPets>()
-            //    .HasKey(t => new { t.UserId, t.PetId });
-
-            //modelBuilder.Entity<LovedPets>()
-            //    .HasOne(u => u.Pet)
-            //    .WithMany(p => p.LovedPets)
-            //    .HasForeignKey(lp => lp.PetId);
-
-            //modelBuilder.Entity<LovedPets>()
-            //    .HasOne(lp => lp.User)
-            //    .WithMany(u => u.LovedPets)
-            //    .HasForeignKey(lp => lp.UserId);
 
             modelBuilder.Entity<Pet>()
                 .Property(p => p.Sex)

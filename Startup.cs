@@ -46,7 +46,9 @@ namespace backend
             services.AddScoped<IPetRepository, PetRepository>();
 
             services.AddScoped<IShelterRepository, ShelterRepository>();
-            
+
+            services.AddScoped<IReservationRepository, ReservationRepository>();
+
             services.AddScoped<IClientRepository, ClientRepository>();
 
             //nzn
