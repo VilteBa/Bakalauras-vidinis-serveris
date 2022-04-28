@@ -17,6 +17,12 @@ namespace backend.Controllers
             _shelterRepository = shelterRepository;
         }
 
+        [HttpGet("Cities")]
+        public IEnumerable<string> GetShelterCities()
+        {
+            return _shelterRepository.GetShelterCities();
+        }
+
         [HttpGet]
         public IEnumerable<Shelter> GetShelters([FromQuery] SheltersQueryModel sheltersQueryModel)
         {
@@ -33,18 +39,6 @@ namespace backend.Controllers
         public Shelter GetShelter(Guid id)
         {
             return _shelterRepository.GetShelter(id);
-        }
-
-        [HttpGet("Pets/{id}")]
-        public List<Pet> GetShelterPets(Guid id)
-        {
-            return _shelterRepository.GetShelter(id).Pets.ToList();
-        }
-
-        [HttpGet("Cities")]
-        public IEnumerable<string> GetShelterCities()
-        {
-            return _shelterRepository.GetShelterCities();
         }
 
         [HttpPost]
@@ -68,5 +62,10 @@ namespace backend.Controllers
             return Ok();
         }
 
+        [HttpGet("Pets/{id}")]
+        public List<Pet> GetShelterPets(Guid id)
+        {
+            return _shelterRepository.GetShelter(id).Pets.ToList();
+        }
     }
 }

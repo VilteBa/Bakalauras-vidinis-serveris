@@ -76,6 +76,7 @@ namespace backend.Controllers
                 client.FirstName,
                 client.LastName,
                 client.PhoneNumber,
+                client.ShelterId,
                 Token = tokenString
             });
         }

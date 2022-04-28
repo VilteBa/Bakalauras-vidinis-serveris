@@ -32,7 +32,7 @@ namespace backend.Controllers
         {
             return Enum.GetValues(typeof(Sex));
         }
-        
+
         [HttpGet("colors")]
         public Array GetColors()
         {
@@ -103,7 +103,7 @@ namespace backend.Controllers
         {
             var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
             var petToAdd = _petRepository.GetPet(petId);
-            user.LovedPets.Add(new LovedPets() { User = user, Pet = petToAdd});
+            user.LovedPets.Add(new LovedPets() { User = user, Pet = petToAdd });
             _dbContext.SaveChanges();
             return _petRepository.GetPet(petId);
         }
@@ -112,7 +112,7 @@ namespace backend.Controllers
         public IActionResult DeleteLovedPet(Guid petId, Guid userId)
         {
             var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
-            var lovedPet = user.LovedPets.SingleOrDefault(x => x.UserId == userId && x.PetId==petId);
+            var lovedPet = user.LovedPets.SingleOrDefault(x => x.UserId == userId && x.PetId == petId);
             user.LovedPets.Remove(lovedPet);
             _dbContext.SaveChanges();
             return Ok();
@@ -132,19 +132,7 @@ namespace backend.Controllers
         {
             var user = _dbContext.Users.SingleOrDefault(u => u.UserId == userId);
             var pet = _petRepository.GetPet(petId);
-            return user.ShelterId==pet.ShelterId;
+            return user.ShelterId == pet.ShelterId;
         }
-
-        //[HttpPost]
-        //public IActionResult Post()
-        //{
-        //    //var postedFile = HttpContext.Current.Request.Files.AllKeys.Any()
-        //    //byte[] bytes;
-        //    //using (BinaryReader br = new BinaryReader(postedFile.InputStream))
-        //    //{
-        //    //    bytes = br.ReadBytes(postedFile.ContentLength);
-        //    //}
-        //    //return Ok();
-        //}
     }
 }

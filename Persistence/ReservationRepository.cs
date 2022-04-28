@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,12 @@ namespace backend.Persistence
 
         public IEnumerable<Reservation> GetShelterReservations(Guid shelterId)
         {
-            return _dbContext.Reservations.Where(r => r.ShelterId == shelterId);
+            return _dbContext.Reservations.Include(r => r.User).Where(r => r.ShelterId == shelterId).OrderBy(r => r.StartTime);
         }
 
         public IEnumerable<Reservation> GetUserReservations(Guid userId)
         {
-            return _dbContext.Reservations.Where(r => r.UserId == userId);
-
+            return _dbContext.Reservations.Include(r => r.Shelter).Where(r => r.UserId == userId).OrderBy(r=> r.StartTime);
         }
     }
 }

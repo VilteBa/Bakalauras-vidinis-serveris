@@ -13,18 +13,16 @@ namespace backend.Models
         [ForeignKey("User")]
         public Guid UserId { get; set; }
 
-        [JsonIgnore]
         public User User { get; set; }
 
         [ForeignKey("Shelter")]
         public Guid ShelterId { get; set; }
 
-        [JsonIgnore]
         public Shelter Shelter { get; set; }
 
-        public DateTime StartTime{ get; set; }
+        public DateTimeOffset StartTime{ get; set; }
 
-        public DateTime EndTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
 
     }
 }
