@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace backend.Models
-{    public enum Role
+﻿namespace backend.Models
+{
+    public enum Role
     {
         Worker,
         User

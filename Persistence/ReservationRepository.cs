@@ -1,6 +1,4 @@
-﻿using backend.Controllers;
-using backend.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using backend.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
