@@ -74,5 +74,32 @@ namespace backend.Persistence
 
             return shelters;
         }
+
+        public static IEnumerable<Reservation> FilterByUser(this IEnumerable<Reservation> reservations, Guid userId)
+        {
+            if (Guid.Empty != userId)
+            {
+                reservations = reservations.Where(x => x.UserId == userId);
+            }
+            return reservations;
+        }
+
+        public static IEnumerable<Reservation> FilterByShelter(this IEnumerable<Reservation> reservations, Guid shelterId)
+        {
+            if (Guid.Empty != shelterId)
+            {
+                reservations = reservations.Where(x => x.ShelterId==shelterId);
+            }
+            return reservations;
+        }
+
+        public static IEnumerable<Reservation> FilterByDate(this IEnumerable<Reservation> reservations, DateTimeOffset? startDate, DateTimeOffset? endDate)
+        {
+            if (startDate < endDate)
+            {
+                reservations = reservations.Where(x => x.StartTime>startDate && x.EndTime<endDate);
+            }
+            return reservations;
+        }
     }
 }

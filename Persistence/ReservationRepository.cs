@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using backend.Controllers;
+using backend.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,19 @@ namespace backend.Persistence
             _dbContext.SaveChanges();
         }
 
+        public IEnumerable<Reservation> GetReservations(ReservationQueryModel reservationQueryModel)
+        {
+            return _dbContext.Reservations
+                .Include(r => r.Shelter)
+                .Include(r => r.User)
+                .FilterByUser(reservationQueryModel.UserId)
+                .FilterByShelter(reservationQueryModel.ShelterId)
+                .FilterByDate(reservationQueryModel.StartTime, reservationQueryModel.EndTime)
+                .OrderBy(r => r.StartTime)
+                .Skip(reservationQueryModel.Page * reservationQueryModel.PageLimit)
+                .Take(reservationQueryModel.PageLimit);
+        }
+
         public IEnumerable<Reservation> GetShelterReservations(Guid shelterId)
         {
             return _dbContext.Reservations.Include(r => r.User).Where(r => r.ShelterId == shelterId).OrderBy(r => r.StartTime);
@@ -34,7 +48,18 @@ namespace backend.Persistence
 
         public IEnumerable<Reservation> GetUserReservations(Guid userId)
         {
-            return _dbContext.Reservations.Include(r => r.Shelter).Where(r => r.UserId == userId).OrderBy(r=> r.StartTime);
+            return _dbContext.Reservations.Include(r => r.Shelter).Where(r => r.UserId == userId).OrderBy(r => r.StartTime);
+        }
+
+        public int CountReservations(ReservationQueryModel reservationQueryModel)
+        {
+            return _dbContext.Reservations
+               .Include(r => r.Shelter)
+               .Include(r => r.User)
+               .FilterByUser(reservationQueryModel.UserId)
+               .FilterByShelter(reservationQueryModel.ShelterId)
+               .FilterByDate(reservationQueryModel.StartTime, reservationQueryModel.EndTime)
+               .Count();
         }
     }
 }

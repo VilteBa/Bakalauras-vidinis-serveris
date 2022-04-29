@@ -1,4 +1,5 @@
-﻿using backend.Models;
+﻿using backend.Controllers;
+using backend.Models;
 using System;
 using System.Collections.Generic;
 
@@ -10,5 +11,7 @@ namespace backend.Persistence
         void DeleteReservation(Guid id);
         IEnumerable<Reservation> GetUserReservations(Guid userId);
         IEnumerable<Reservation> GetShelterReservations(Guid shelterId);
+        IEnumerable<Reservation> GetReservations(ReservationQueryModel reservationQueryModel);
+        int CountReservations(ReservationQueryModel reservationQueryModel);
     }
 }

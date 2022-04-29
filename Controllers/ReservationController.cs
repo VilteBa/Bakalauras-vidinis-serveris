@@ -33,16 +33,28 @@ namespace backend.Controllers
             return Ok();
         }
 
-        [HttpGet("User/{id}")]
-        public List<Reservation> GetUserReservations(Guid id)
+        //[HttpGet("User/{id}")]
+        //public List<Reservation> GetUserReservations(Guid id)
+        //{
+        //    return _reservationRepository.GetUserReservations(id).ToList();
+        //}
+
+        //[HttpGet("Shelter/{id}")]
+        //public List<Reservation> GetShelterReservations(Guid id)
+        //{
+        //    return _reservationRepository.GetShelterReservations(id).ToList();
+        //}
+
+        [HttpGet()]
+        public List<Reservation> GetReservations([FromQuery] ReservationQueryModel reservationQueryModel)
         {
-            return _reservationRepository.GetUserReservations(id).ToList();
+            return _reservationRepository.GetReservations(reservationQueryModel).ToList();
         }
 
-        [HttpGet("Shelter/{id}")]
-        public List<Reservation> GetShelterReservations(Guid id)
+        [HttpGet("Count")]
+        public IActionResult GetCount([FromQuery] ReservationQueryModel reservationQueryModel)
         {
-            return _reservationRepository.GetShelterReservations(id).ToList();
+            return Ok(_reservationRepository.CountReservations(reservationQueryModel));
         }
     }
 }
