@@ -14,5 +14,7 @@ namespace backend.Persistence
         void CreateShelter(Shelter shelter);
         void DeleteShelter(Guid id);
         int CountShelters(SheltersQueryModel sheltersQueryModel);
+        IEnumerable<Pet> GetShelterPets(Guid id, PetsQueryModel petsQueryModel);
+        int CountShelterPets(Guid id, PetsQueryModel petsQueryModel);
     }
 }

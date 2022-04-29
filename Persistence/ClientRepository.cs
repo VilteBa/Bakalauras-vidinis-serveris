@@ -2,6 +2,8 @@
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using backend.Controllers;
 
 namespace backend.Persistence
 {
@@ -106,6 +108,35 @@ namespace backend.Persistence
             var userToUpdate = _dbContext.Users.SingleOrDefault(p => p.UserId == user.UserId);
             _dbContext.Entry(userToUpdate).CurrentValues.SetValues(user);
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<Pet> GetUserLovedPets(Guid id, PetsQueryModel petsQueryModel)
+        {
+            var lovedPets = GetUser(id).LovedPets.Select(lp => lp.Pet);
+            return lovedPets
+                .FilterByCity(petsQueryModel.Cities)
+                .FilterBySize(petsQueryModel.Sizes)
+                .FilterBySex(petsQueryModel.Sexes)
+                .FilterByType(petsQueryModel.Types)
+                .FilterByColor(petsQueryModel.Colors)
+                .FilterByAge(petsQueryModel.MinAge, petsQueryModel.MaxAge)
+                .Skip(petsQueryModel.Page * petsQueryModel.PageLimit)
+                .Take(petsQueryModel.PageLimit);
+
+        }
+
+        public int CountUserLovedPets(Guid id, PetsQueryModel petsQueryModel)
+        {
+            var lovedPets = GetUser(id).LovedPets.Select(lp => lp.Pet);
+            return lovedPets
+                .FilterByCity(petsQueryModel.Cities)
+                .FilterBySize(petsQueryModel.Sizes)
+                .FilterBySex(petsQueryModel.Sexes)
+                .FilterByType(petsQueryModel.Types)
+                .FilterByColor(petsQueryModel.Colors)
+                .FilterByAge(petsQueryModel.MinAge, petsQueryModel.MaxAge)
+                .Count();
+
         }
     }
 }

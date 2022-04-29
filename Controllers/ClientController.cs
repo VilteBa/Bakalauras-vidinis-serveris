@@ -81,14 +81,6 @@ namespace backend.Controllers
             });
         }
 
-        // todo: sutvarkyt tuos anonymous
-        [AllowAnonymous]
-        [HttpGet("{id}/lovedPets")]
-        public List<Pet> GetPetsLoved(Guid id)
-        {
-            return _clientRepository.GetUser(id).LovedPets.Select(lp => lp.Pet).ToList();
-        }      // todo: sutvarkyt tuos anonymous
-
         [AllowAnonymous]
         [HttpPatch()]
         public IActionResult UpdateUser(User user)
@@ -103,19 +95,22 @@ namespace backend.Controllers
         {
             return _clientRepository.GetUser(id);
         }
-        //[AllowAnonymous]
-        //[HttpGet("{clientId}")]
-        //public IActionResult GetCustomerReservations(Guid customerId)
-        //{
-        //    try
-        //    {
-        //        var reservations = _clientRepository.GetLovedPets(customerId);
-        //        return Ok(reservations);
-        //    }
-        //    catch (ApplicationException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+
+        // todo: sutvarkyt tuos anonymous
+        [AllowAnonymous]
+        [HttpGet("{id}/lovedPets")]
+        public List<Pet> GetPetsLoved(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
+        {
+            return _clientRepository.GetUserLovedPets(id, petsQueryModel).ToList();
+        }
+
+        // todo: sutvarkyt tuos anonymous
+        [AllowAnonymous]
+        [HttpGet("{id}/lovedPets/Count")]
+        public IActionResult CountPetsLoved(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
+        {
+            return Ok(_clientRepository.CountUserLovedPets(id, petsQueryModel));
+        }
+
     }
 }

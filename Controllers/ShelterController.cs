@@ -63,9 +63,15 @@ namespace backend.Controllers
         }
 
         [HttpGet("Pets/{id}")]
-        public List<Pet> GetShelterPets(Guid id)
+        public List<Pet> GetShelterPets(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
         {
-            return _shelterRepository.GetShelter(id).Pets.ToList();
+            return _shelterRepository.GetShelterPets(id, petsQueryModel).ToList();
+        }
+
+        [HttpGet("Pets/{id}/Count")]
+        public IActionResult CountShelterPets(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
+        {
+            return Ok(_shelterRepository.CountShelterPets(id, petsQueryModel));
         }
     }
 }

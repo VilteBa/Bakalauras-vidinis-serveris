@@ -31,7 +31,7 @@ namespace backend.Persistence
                 .Count();
         }
 
-        Shelter IShelterRepository.GetShelter(Guid id)
+        public Shelter GetShelter(Guid id)
         {
             return _dbContext.Shelters.Include(s => s.Pets).SingleOrDefault(shelter => shelter.ShelterId == id);
         }
@@ -48,7 +48,7 @@ namespace backend.Persistence
             _dbContext.Shelters.Remove(shelter ?? throw new InvalidOperationException());
             _dbContext.SaveChanges();
         }
-        public IEnumerable<string> GetShelterCities() 
+        public IEnumerable<string> GetShelterCities()
         {
             return _dbContext.Shelters.Select(x => x.City).Distinct();
         }
@@ -59,5 +59,32 @@ namespace backend.Persistence
             _dbContext.Entry(shelterToUpdate).CurrentValues.SetValues(shelter);
             _dbContext.SaveChanges();
         }
+
+        public IEnumerable<Pet> GetShelterPets(Guid id, PetsQueryModel petsQueryModel)
+        {
+            var shelterPets = GetShelter(id).Pets;
+
+            return shelterPets
+                .FilterBySize(petsQueryModel.Sizes)
+                .FilterBySex(petsQueryModel.Sexes)
+                .FilterByType(petsQueryModel.Types)
+                .FilterByColor(petsQueryModel.Colors)
+                .FilterByAge(petsQueryModel.MinAge, petsQueryModel.MaxAge)
+                .Skip(petsQueryModel.Page * petsQueryModel.PageLimit)
+                .Take(petsQueryModel.PageLimit);
+        }
+        public int CountShelterPets(Guid id, PetsQueryModel petsQueryModel)
+        {
+            var shelterPets = GetShelter(id).Pets;
+
+            return shelterPets
+                .FilterBySize(petsQueryModel.Sizes)
+                .FilterBySex(petsQueryModel.Sexes)
+                .FilterByType(petsQueryModel.Types)
+                .FilterByColor(petsQueryModel.Colors)
+                .FilterByAge(petsQueryModel.MinAge, petsQueryModel.MaxAge)
+                .Count();
+        }
+
     }
 }
