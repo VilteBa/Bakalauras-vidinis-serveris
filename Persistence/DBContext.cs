@@ -55,8 +55,7 @@ namespace backend.Persistence
             modelBuilder.Entity<Shelter>()
                 .HasOne(s => s.ShelterPhoto)
                 .WithOne(f => f.Shelter)
-                .HasForeignKey<File>(f => f.ShelterId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey<File>(f => f.ShelterId);
 
             // gyvunai pamegti vartotoju
             modelBuilder.Entity<User>()

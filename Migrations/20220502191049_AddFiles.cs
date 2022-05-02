@@ -35,7 +35,7 @@ namespace backend.Migrations
                         column: x => x.ShelterId,
                         principalTable: "Shelters",
                         principalColumn: "ShelterId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

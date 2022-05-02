@@ -139,7 +139,7 @@ namespace backend.Controllers
         [HttpPost]
         public IActionResult AddPhoto([FromForm] FileModel file)
         {
-            //var createdPet = _petRepository.crea(pet);
+            //var createdPet = _petRepository.CreatePet
             return Ok();
         }
 
