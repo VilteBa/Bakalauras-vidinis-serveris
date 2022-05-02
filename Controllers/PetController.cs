@@ -1,5 +1,6 @@
 ﻿using backend.Models;
 using backend.Persistence;
+using backend.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -134,5 +135,13 @@ namespace backend.Controllers
             var pet = _petRepository.GetPet(petId);
             return user.ShelterId == pet.ShelterId;
         }
+
+        [HttpPost]
+        public IActionResult AddPhoto([FromForm] FileModel file)
+        {
+            //var createdPet = _petRepository.crea(pet);
+            return Ok();
+        }
+
     }
 }
