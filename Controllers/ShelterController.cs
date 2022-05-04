@@ -1,9 +1,12 @@
 ﻿using backend.Models;
 using backend.Persistence;
+using backend.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using File = backend.Models.File;
 
 namespace backend.Controllers
 {
@@ -12,9 +15,12 @@ namespace backend.Controllers
     public class ShelterController : ControllerBase
     {
         private readonly IShelterRepository _shelterRepository;
-        public ShelterController(IShelterRepository shelterRepository)
+        private readonly IFileRepository _fileRepository;
+
+        public ShelterController(IShelterRepository shelterRepository, IFileRepository fileRepository)
         {
             _shelterRepository = shelterRepository;
+            _fileRepository = fileRepository;
         }
 
         [HttpGet("Cities")]
@@ -72,6 +78,38 @@ namespace backend.Controllers
         public IActionResult CountShelterPets(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
         {
             return Ok(_shelterRepository.CountShelterPets(id, petsQueryModel));
+        }
+
+        [HttpPost("{id}/photo")]
+        public IActionResult AddPhotos(Guid id, [FromForm] FileModel photo)
+        {
+            var data = FileToByteArray(photo);
+
+            _fileRepository.CreateFile(new File { FileName = photo.FileName, Data = data, ShelterId = id });
+
+            return Ok();
+        }
+
+        [HttpGet("{id}/photo")]
+        public IActionResult GetPhotos(Guid id)
+        {
+            return Ok(_fileRepository.GetShelterPhoto(id));
+        }
+
+        [HttpDelete("photos/{fileId}")]
+        public IActionResult DeletePhoto(Guid fileId)
+        {
+            _fileRepository.DeleteFile(fileId);
+            return Ok();
+        }
+
+        private static byte[] FileToByteArray(FileModel file)
+        {
+            using (var ms = new MemoryStream())
+            {
+                file.FormFile.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
     }
 }

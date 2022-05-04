@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using File = backend.Models.File;
 
 namespace backend.Controllers
 {
@@ -14,11 +16,13 @@ namespace backend.Controllers
     public class PetController : ControllerBase
     {
         private readonly DBContext _dbContext;
-        private readonly IPetRepository _petRepository;
+        private readonly IPetRepository _petRepo;
+        private readonly IFileRepository _fileRepo;
 
-        public PetController(IPetRepository testPetRepo, DBContext dbContext)
+        public PetController(IPetRepository petRepo, IFileRepository fileRepo, DBContext dbContext)
         {
-            _petRepository = testPetRepo;
+            _petRepo = petRepo;
+            _fileRepo = fileRepo;
             _dbContext = dbContext;
         }
 
@@ -49,46 +53,46 @@ namespace backend.Controllers
         [HttpGet]
         public IEnumerable<Pet> GetPets([FromQuery] PetsQueryModel petsQueryModel)
         {
-            return _petRepository.GetPets(petsQueryModel);
+            return _petRepo.GetPets(petsQueryModel);
         }
 
 
         [HttpGet("Count")]
         public IActionResult CountPets([FromQuery] PetsQueryModel petsQueryModel)
         {
-            return Ok(_petRepository.CountPets(petsQueryModel));
+            return Ok(_petRepo.CountPets(petsQueryModel));
         }
 
         [HttpGet("{id}")]
         public Pet GetPet(Guid id)
         {
-            return _petRepository.GetPet(id);
+            return _petRepo.GetPet(id);
         }
 
         [HttpGet("{id}/shelter")]
         public Shelter GetPetShelter(Guid id)
         {
-            return _petRepository.GetPet(id).Shelter;
+            return _petRepo.GetPet(id).Shelter;
         }
 
         [HttpPost]
         public IActionResult CreatePet([FromBody] Pet pet)
         {
-            var createdPet = _petRepository.CreatePet(pet);
+            var createdPet = _petRepo.CreatePet(pet);
             return Ok(createdPet);
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletePet(Guid id)
         {
-            _petRepository.DeletePet(id);
+            _petRepo.DeletePet(id);
             return Ok();
         }
 
         [HttpPatch]
         public IActionResult UpdatePet(Pet pet)
         {
-            _petRepository.UpdatePet(pet);
+            _petRepo.UpdatePet(pet);
             return Ok();
         }
 
@@ -96,17 +100,17 @@ namespace backend.Controllers
         [HttpGet("{id}/loved")]
         public List<User> GetPetsLoved(Guid id)
         {
-            return _petRepository.GetPet(id).LovedPets.Select(lp => lp.User).ToList();
+            return _petRepo.GetPet(id).LovedPets.Select(lp => lp.User).ToList();
         }
 
         [HttpPut("LovePet")]
         public Pet AddLovedPet(Guid petId, Guid userId)
         {
             var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
-            var petToAdd = _petRepository.GetPet(petId);
+            var petToAdd = _petRepo.GetPet(petId);
             user.LovedPets.Add(new LovedPets() { User = user, Pet = petToAdd });
             _dbContext.SaveChanges();
-            return _petRepository.GetPet(petId);
+            return _petRepo.GetPet(petId);
         }
 
         [HttpDelete("UnlovePet")]
@@ -132,16 +136,43 @@ namespace backend.Controllers
         public Boolean IsEditableByUser(Guid petId, Guid userId)
         {
             var user = _dbContext.Users.SingleOrDefault(u => u.UserId == userId);
-            var pet = _petRepository.GetPet(petId);
+            var pet = _petRepo.GetPet(petId);
             return user.ShelterId == pet.ShelterId;
         }
 
-        [HttpPost]
-        public IActionResult AddPhoto([FromForm] FileModel file)
+        [HttpPost("{id}/photos")]
+        public IActionResult AddPhotos(Guid id, [FromForm] FileModel[] photos)
         {
-            //var createdPet = _petRepository.CreatePet
+            foreach (var photo in photos)
+            {
+                var data = FileToByteArray(photo);
+
+                _fileRepo.CreateFile(new File { FileName = photo.FileName, Data = data, PetId = id });
+            }
+
             return Ok();
         }
 
+        [HttpGet("{id}/photos")]
+        public IActionResult GetPhotos(Guid id)
+        {
+            return Ok(_fileRepo.GetPetPhotos(id));
+        }
+
+        [HttpDelete("photos/{fileId}")]
+        public IActionResult DeletePhoto(Guid fileId)
+        {
+            _fileRepo.DeleteFile(fileId);
+            return Ok();
+        }
+
+        private static byte[] FileToByteArray(FileModel file)
+        {
+            using (var ms = new MemoryStream())
+            {
+                file.FormFile.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
     }
 }
