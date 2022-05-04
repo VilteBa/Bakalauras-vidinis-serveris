@@ -18,7 +18,9 @@ namespace backend.Persistence
 
         public IEnumerable<Shelter> GetShelters(SheltersQueryModel sheltersQueryModel)
         {
-            return _dbContext.Shelters.AsQueryable()
+            return _dbContext.Shelters
+                .Include(s => s.ShelterPhoto)
+                .AsQueryable()
                 .FilterByCity(sheltersQueryModel.Cities)
                 .Skip(sheltersQueryModel.Page * sheltersQueryModel.PageLimit)
                 .Take(sheltersQueryModel.PageLimit);
@@ -33,7 +35,10 @@ namespace backend.Persistence
 
         public Shelter GetShelter(Guid id)
         {
-            return _dbContext.Shelters.Include(s => s.Pets).SingleOrDefault(shelter => shelter.ShelterId == id);
+            return _dbContext.Shelters
+                .Include(s => s.ShelterPhoto)
+                .Include(s => s.Pets)
+                .SingleOrDefault(shelter => shelter.ShelterId == id);
         }
 
         public void CreateShelter(Shelter shelter)
