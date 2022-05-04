@@ -26,7 +26,6 @@ namespace backend.Models
         [JsonIgnore]
         public virtual ICollection<Reservation> Reservations { get; set; }
 
-        [JsonIgnore]//todo: Kad neuzsiloopintu
         public virtual File ShelterPhoto { get; set; }
     }
 }

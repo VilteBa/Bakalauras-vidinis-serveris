@@ -85,6 +85,8 @@ namespace backend.Controllers
         {
             var data = FileToByteArray(photo);
 
+            var currentPhoto = _fileRepository.GetShelterPhoto(id);
+            if (currentPhoto != null) _fileRepository.DeleteFile(currentPhoto.FileId);
             _fileRepository.CreateFile(new File { FileName = photo.FileName, Data = data, ShelterId = id });
 
             return Ok();
@@ -111,5 +113,5 @@ namespace backend.Controllers
                 return ms.ToArray();
             }
         }
-    }
+     }
 }

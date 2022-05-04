@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace backend.Models
 {
@@ -16,11 +17,13 @@ namespace backend.Models
         [ForeignKey("Shelter")]
         public Guid? ShelterId { get; set; }
 
+        [JsonIgnore]
         public Shelter Shelter { get; set; }
 
         [ForeignKey("Pet")]
         public Guid? PetId { get; set; }
 
+        [JsonIgnore]
         public Pet Pet { get; set; }
     }
 }

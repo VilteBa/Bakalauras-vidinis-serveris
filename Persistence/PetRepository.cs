@@ -18,7 +18,7 @@ namespace backend.Persistence
 
         public Pet GetPet(Guid petId)
         {
-            return _dbContext.Pets.Include(p => p.Shelter).Include(p => p.Users).SingleOrDefault(pet => pet.PetId == petId);
+            return _dbContext.Pets.Include(p => p.Photos).Include(p => p.Shelter).Include(p => p.Users).SingleOrDefault(pet => pet.PetId == petId);
         }
 
         public void DeletePet(Guid petId)
@@ -34,6 +34,7 @@ namespace backend.Persistence
         {
             var petsFromDB = _dbContext.Pets
                 .Include(x => x.Shelter)
+                .Include(s => s.Photos)
                 .FilterByCity(petsQueryModel.Cities)
                 .FilterBySize(petsQueryModel.Sizes)
                 .FilterBySex(petsQueryModel.Sexes)
