@@ -10,7 +10,7 @@ using backend.Persistence;
 namespace backend.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20220502184636_AddFiles")]
+    [Migration("20220502191049_AddFiles")]
     partial class AddFiles
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -211,8 +211,7 @@ namespace backend.Migrations
 
                     b.HasOne("backend.Models.Shelter", "Shelter")
                         .WithOne("ShelterPhoto")
-                        .HasForeignKey("backend.Models.File", "ShelterId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("backend.Models.File", "ShelterId");
 
                     b.Navigation("Pet");
 

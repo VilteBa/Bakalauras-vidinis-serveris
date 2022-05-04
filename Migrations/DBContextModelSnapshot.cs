@@ -209,8 +209,7 @@ namespace backend.Migrations
 
                     b.HasOne("backend.Models.Shelter", "Shelter")
                         .WithOne("ShelterPhoto")
-                        .HasForeignKey("backend.Models.File", "ShelterId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("backend.Models.File", "ShelterId");
 
                     b.Navigation("Pet");
 
