@@ -50,6 +50,8 @@ namespace backend
 
             services.AddScoped<IClientRepository, ClientRepository>();
 
+            services.AddScoped<IFileRepository, FileRepository>();
+
             //nzn
             //services.AddAutoMapper();
 
