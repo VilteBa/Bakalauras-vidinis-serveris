@@ -15,6 +15,8 @@ namespace backend.Persistence
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<File> Files { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Gyvunas priklauso priglaudai
@@ -41,6 +43,19 @@ namespace backend.Persistence
                 .HasMany(s => s.Reservations)
                 .WithOne(p => p.User)
                 .HasForeignKey(p => p.UserId);
+
+            // Gyvunas turi daug paveiksliuku
+            modelBuilder.Entity<Pet>()
+                .HasMany(p => p.Photos)
+                .WithOne(f => f.Pet)
+                .HasForeignKey(f => f.PetId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Prieglauda turi viena paveiksleli
+            modelBuilder.Entity<Shelter>()
+                .HasOne(s => s.ShelterPhoto)
+                .WithOne(f => f.Shelter)
+                .HasForeignKey<File>(f => f.ShelterId);
 
             // gyvunai pamegti vartotoju
             modelBuilder.Entity<User>()
