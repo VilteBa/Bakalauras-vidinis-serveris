@@ -2,6 +2,11 @@
 {
     public enum Color
     {
-        Black
+        Black,
+        White,
+        Brown,
+        Grey,
+        Tabby,
+        Sand
     }
 }
