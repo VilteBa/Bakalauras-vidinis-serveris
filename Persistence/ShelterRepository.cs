@@ -67,9 +67,10 @@ namespace backend.Persistence
 
         public IEnumerable<Pet> GetShelterPets(Guid id, PetsQueryModel petsQueryModel)
         {
-            var shelterPets = GetShelter(id).Pets;
+            var shelterPets = _dbContext.Pets.Where(p=> p.ShelterId==id);
 
             return shelterPets
+                .Include(s => s.Photos)
                 .FilterBySize(petsQueryModel.Sizes)
                 .FilterBySex(petsQueryModel.Sexes)
                 .FilterByType(petsQueryModel.Types)

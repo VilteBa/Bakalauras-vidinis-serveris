@@ -29,7 +29,6 @@ namespace backend.Models
         [JsonIgnore]
         public virtual ICollection<LovedPets> LovedPets { get; set; }
 
-        [JsonIgnore]//todo: Kad neuzsiloopintu
         public virtual ICollection<File> Photos { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using backend.Models;
 using backend.Persistence;
-using backend.RequestModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -81,13 +81,13 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/photo")]
-        public IActionResult AddPhotos(Guid id, [FromForm] FileModel photo)
+        public IActionResult AddPhotos(Guid id, [FromForm] IFormFile file)
         {
-            var data = FileToByteArray(photo);
+            var data = FileToByteArray(file);
 
             var currentPhoto = _fileRepository.GetShelterPhoto(id);
             if (currentPhoto != null) _fileRepository.DeleteFile(currentPhoto.FileId);
-            _fileRepository.CreateFile(new File { FileName = photo.FileName, Data = data, ShelterId = id });
+            _fileRepository.CreateFile(new File { FileName = file.FileName, Data = data, ShelterId = id });
 
             return Ok();
         }
@@ -105,11 +105,11 @@ namespace backend.Controllers
             return Ok();
         }
 
-        private static byte[] FileToByteArray(FileModel file)
+        private static byte[] FileToByteArray(IFormFile file)
         {
             using (var ms = new MemoryStream())
             {
-                file.FormFile.CopyTo(ms);
+                file.CopyTo(ms);
                 return ms.ToArray();
             }
         }

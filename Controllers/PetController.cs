@@ -1,6 +1,6 @@
 ﻿using backend.Models;
 using backend.Persistence;
-using backend.RequestModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -141,9 +141,9 @@ namespace backend.Controllers
         }
 
         [HttpPost("{id}/photos")]
-        public IActionResult AddPhotos(Guid id, [FromForm] FileModel[] photos)
+        public IActionResult AddPhotos(Guid id, [FromForm] List<IFormFile> files)
         {
-            foreach (var photo in photos)
+            foreach (var photo in files)
             {
                 var data = FileToByteArray(photo);
 
@@ -166,11 +166,11 @@ namespace backend.Controllers
             return Ok();
         }
 
-        private static byte[] FileToByteArray(FileModel file)
+        private static byte[] FileToByteArray(IFormFile file)
         {
             using (var ms = new MemoryStream())
             {
-                file.FormFile.CopyTo(ms);
+                file.CopyTo(ms);
                 return ms.ToArray();
             }
         }
