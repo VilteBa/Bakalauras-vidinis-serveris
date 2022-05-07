@@ -112,8 +112,12 @@ namespace backend.Persistence
 
         public IEnumerable<Pet> GetUserLovedPets(Guid id, PetsQueryModel petsQueryModel)
         {
-            var lovedPets = GetUser(id).LovedPets.Select(lp => lp.Pet);
+            var lovedPets = _dbContext.Pets
+                .Include(p => p.Photos)
+                .Include(p => p.LovedPets);
+
             return lovedPets
+                .Where(p => p.LovedPets.Any(lp=> lp.UserId == id))
                 .FilterByCity(petsQueryModel.Cities)
                 .FilterBySize(petsQueryModel.Sizes)
                 .FilterBySex(petsQueryModel.Sexes)
