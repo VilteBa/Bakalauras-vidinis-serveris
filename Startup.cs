@@ -52,15 +52,11 @@ namespace backend
 
             services.AddScoped<IFileRepository, FileRepository>();
 
-            //nzn
-            //services.AddAutoMapper();
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gyvūnų Globa", Version = "v1" });
             });
 
-            //For auth
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.SaveToken = true;
@@ -73,7 +69,6 @@ namespace backend
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
-            //For auth
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,9 +87,7 @@ namespace backend
 
             app.UseRouting();
 
-            //For auth
             app.UseAuthentication();
-            //For auth
 
             app.UseAuthorization();
 

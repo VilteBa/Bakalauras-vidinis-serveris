@@ -61,12 +61,6 @@ namespace backend.Persistence
             return client;
         }
 
-        //public IEnumerable<Pet> GetLovedPets(Guid clientId)
-        //{
-        //    var client = _dbContext.Clients.SingleOrDefault(client => client.ClientId == clientId);
-        //    return client.LovedPets;
-        //}
-
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException(nameof(password));

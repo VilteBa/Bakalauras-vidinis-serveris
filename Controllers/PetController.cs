@@ -96,7 +96,6 @@ namespace backend.Controllers
             return Ok();
         }
 
-        // todo: perktelt prie user
         [HttpGet("{id}/loved")]
         public List<User> GetPetsLoved(Guid id)
         {

@@ -26,8 +26,6 @@ namespace backend.Persistence
             var pet = _dbContext.Pets.SingleOrDefault(pet => pet.PetId == petId);
             _dbContext.Pets.Remove(pet ?? throw new InvalidOperationException());
             _dbContext.SaveChanges();
-
-            // todo: isvalyt ir is pamegtu?
         }
 
         public IEnumerable<Pet> GetPets(PetsQueryModel petsQueryModel)

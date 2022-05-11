@@ -15,10 +15,9 @@ namespace backend.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]/[action]")] // kod action
+    [Route("[controller]/[action]")]
     public class CustomerController : ControllerBase
     {
-        //isemiau mapper
         private readonly IClientRepository _clientRepository;
         public IConfiguration _configuration;
         public CustomerController(IClientRepository customerService, IConfiguration configuration)
