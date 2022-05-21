@@ -26,6 +26,20 @@ namespace backend.Controllers
             return Ok();
         }
 
+        [HttpPut("{id}/approve")]
+        public IActionResult ApproveReservation(Guid id)
+        {
+            _reservationRepository.ApproveReservation(id);
+            return Ok();
+        }
+
+        [HttpPut("{id}/cancel")]
+        public IActionResult CancelReservation(Guid id)
+        {
+            _reservationRepository.CancelReservation(id);
+            return Ok();
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteReservation(Guid id)
         {
@@ -43,6 +57,12 @@ namespace backend.Controllers
         public IActionResult GetCount([FromQuery] ReservationQueryModel reservationQueryModel)
         {
             return Ok(_reservationRepository.CountReservations(reservationQueryModel));
+        }
+
+        [HttpGet("States")]
+        public IActionResult GetStates()
+        {
+            return Ok(Enum.GetValues(typeof(ReservationState)));
         }
     }
 }

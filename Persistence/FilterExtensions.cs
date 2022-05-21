@@ -101,5 +101,14 @@ namespace backend.Persistence
             }
             return reservations;
         }
+        public static IEnumerable<Reservation> FilterByState(this IEnumerable<Reservation> reservations, ReservationState? reservationState)
+        {
+            if (reservationState != null)
+            {
+                reservations = reservations.Where(x => x.ReservationState == reservationState);
+                return reservations;
+            }
+            return reservations;
+        }
     }
 }

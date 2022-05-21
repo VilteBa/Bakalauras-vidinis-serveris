@@ -13,5 +13,7 @@ namespace backend.Persistence
         IEnumerable<Reservation> GetShelterReservations(Guid shelterId);
         IEnumerable<Reservation> GetReservations(ReservationQueryModel reservationQueryModel);
         int CountReservations(ReservationQueryModel reservationQueryModel);
+        void ApproveReservation(Guid id);
+        void CancelReservation(Guid id);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using backend.Models;
+using System;
 using System.ComponentModel;
 
 namespace backend.Controllers
@@ -22,6 +23,8 @@ namespace backend.Controllers
         public DateTimeOffset? StartTime { get; set; }
 
         public DateTimeOffset? EndTime { get; set; }
+
+        public ReservationState? ReservationState { get; set; }
 
     }
 }

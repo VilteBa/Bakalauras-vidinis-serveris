@@ -24,5 +24,7 @@ namespace backend.Models
 
         public DateTimeOffset EndTime { get; set; }
 
+        public ReservationState ReservationState { get; set; }
+
     }
 }

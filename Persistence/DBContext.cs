@@ -75,6 +75,10 @@ namespace backend.Persistence
                     j.HasKey(t => new { t.PetId, t.UserId });
                 });
 
+            modelBuilder.Entity<Reservation>()
+                .Property(p => p.ReservationState)
+                .HasConversion<string>();
+
             modelBuilder.Entity<Pet>()
                 .Property(p => p.Sex)
                 .HasConversion<string>();

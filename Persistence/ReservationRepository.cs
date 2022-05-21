@@ -17,6 +17,7 @@ namespace backend.Persistence
         }
         public void CreateReservation(Reservation reservation)
         {
+            reservation.ReservationState = ReservationState.None;
             _dbContext.Reservations.Add(reservation);
             _dbContext.SaveChanges();
         }
@@ -36,6 +37,7 @@ namespace backend.Persistence
                 .FilterByUser(reservationQueryModel.UserId)
                 .FilterByShelter(reservationQueryModel.ShelterId)
                 .FilterByDate(reservationQueryModel.StartTime, reservationQueryModel.EndTime)
+                .FilterByState(reservationQueryModel.ReservationState)
                 .OrderBy(r => r.StartTime)
                 .Skip(reservationQueryModel.Page * reservationQueryModel.PageLimit)
                 .Take(reservationQueryModel.PageLimit);
@@ -60,6 +62,20 @@ namespace backend.Persistence
                .FilterByShelter(reservationQueryModel.ShelterId)
                .FilterByDate(reservationQueryModel.StartTime, reservationQueryModel.EndTime)
                .Count();
+        }
+
+        public void ApproveReservation(Guid id)
+        {
+            var reservation = _dbContext.Reservations.SingleOrDefault(r => r.ReservationId == id);
+            reservation.ReservationState = ReservationState.Approved;
+            _dbContext.SaveChanges();
+        }
+
+        public void CancelReservation(Guid id)
+        {
+            var reservation = _dbContext.Reservations.SingleOrDefault(r => r.ReservationId == id);
+            reservation.ReservationState = ReservationState.Canceled;
+            _dbContext.SaveChanges();
         }
     }
 }
