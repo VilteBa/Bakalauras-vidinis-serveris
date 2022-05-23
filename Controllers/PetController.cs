@@ -27,33 +27,38 @@ namespace backend.Controllers
         }
 
         [HttpGet("sizes")]
-        public Array GetSizes()
+        public IActionResult GetSizes()
         {
-            return Enum.GetValues(typeof(Size));
+            return Ok(Enum.GetValues(typeof(Size)));
         }
 
         [HttpGet("sexes")]
-        public Array GetSexes()
+        public IActionResult GetSexes()
         {
-            return Enum.GetValues(typeof(Sex));
+            return Ok(Enum.GetValues(typeof(Sex)));
         }
 
         [HttpGet("colors")]
-        public Array GetColors()
+        public IActionResult GetColors()
         {
-            return Enum.GetValues(typeof(Color));
+            return Ok(Enum.GetValues(typeof(Color)));
         }
 
         [HttpGet("types")]
-        public Array GetTypes()
+        public IActionResult GetTypes()
         {
-            return Enum.GetValues(typeof(PetType));
+            return Ok(Enum.GetValues(typeof(PetType)));
         }
 
         [HttpGet]
-        public IEnumerable<Pet> GetPets([FromQuery] PetsQueryModel petsQueryModel)
+        public IActionResult GetPets([FromQuery] PetsQueryModel petsQueryModel)
         {
-            return _petRepo.GetPets(petsQueryModel);
+            var pets = _petRepo.GetPets(petsQueryModel);
+            if (pets == null || !pets.Any())
+            {
+                return NotFound();
+            }
+            return Ok(pets);
         }
 
 
@@ -64,15 +69,25 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public Pet GetPet(Guid id)
+        public IActionResult GetPet(Guid id)
         {
-            return _petRepo.GetPet(id);
+            var pet = _petRepo.GetPet(id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+            return Ok(pet);
         }
 
         [HttpGet("{id}/shelter")]
-        public Shelter GetPetShelter(Guid id)
+        public IActionResult GetPetShelter(Guid id)
         {
-            return _petRepo.GetPet(id).Shelter;
+            var pet = _petRepo.GetPet(id);
+            if (pet == null)
+            {
+                return NotFound();
+            }
+            return Ok(pet.Shelter);
         }
 
         [HttpPost]
@@ -96,20 +111,14 @@ namespace backend.Controllers
             return Ok();
         }
 
-        [HttpGet("{id}/loved")]
-        public List<User> GetPetsLoved(Guid id)
-        {
-            return _petRepo.GetPet(id).LovedPets.Select(lp => lp.User).ToList();
-        }
-
         [HttpPut("LovePet")]
-        public Pet AddLovedPet(Guid petId, Guid userId)
+        public IActionResult AddLovedPet(Guid petId, Guid userId)
         {
             var user = _dbContext.Users.Include(u => u.LovedPets).SingleOrDefault(u => u.UserId == userId);
             var petToAdd = _petRepo.GetPet(petId);
             user.LovedPets.Add(new LovedPets() { User = user, Pet = petToAdd });
             _dbContext.SaveChanges();
-            return _petRepo.GetPet(petId);
+            return Ok(_petRepo.GetPet(petId));
         }
 
         [HttpDelete("UnlovePet")]
@@ -132,11 +141,11 @@ namespace backend.Controllers
 
 
         [HttpGet("Editable")]
-        public Boolean IsEditableByUser(Guid petId, Guid userId)
+        public IActionResult IsEditableByUser(Guid petId, Guid userId)
         {
             var user = _dbContext.Users.SingleOrDefault(u => u.UserId == userId);
             var pet = _petRepo.GetPet(petId);
-            return user.ShelterId == pet.ShelterId;
+            return Ok(user.ShelterId == pet.ShelterId);
         }
 
         [HttpPost("{id}/photos")]
@@ -155,7 +164,12 @@ namespace backend.Controllers
         [HttpGet("{id}/photos")]
         public IActionResult GetPhotos(Guid id)
         {
-            return Ok(_fileRepo.GetPetPhotos(id));
+            var photos = _fileRepo.GetPetPhotos(id);
+            if (photos == null || !photos.Any())
+            {
+                return NotFound();
+            }
+            return Ok(photos);
         }
 
         [HttpDelete("photos/{fileId}")]

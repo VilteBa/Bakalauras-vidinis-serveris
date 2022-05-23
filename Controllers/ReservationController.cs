@@ -48,9 +48,14 @@ namespace backend.Controllers
         }
 
         [HttpGet()]
-        public List<Reservation> GetReservations([FromQuery] ReservationQueryModel reservationQueryModel)
+        public IActionResult GetReservations([FromQuery] ReservationQueryModel reservationQueryModel)
         {
-            return _reservationRepository.GetReservations(reservationQueryModel).ToList();
+            var reservations = _reservationRepository.GetReservations(reservationQueryModel).ToList();
+            if (reservations == null || !reservations.Any())
+            {
+                return NotFound();
+            }
+            return Ok(reservations);
         }
 
         [HttpGet("Count")]

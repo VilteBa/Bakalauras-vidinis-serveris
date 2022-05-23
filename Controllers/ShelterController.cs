@@ -24,15 +24,25 @@ namespace backend.Controllers
         }
 
         [HttpGet("Cities")]
-        public IEnumerable<string> GetShelterCities()
+        public IActionResult GetShelterCities()
         {
-            return _shelterRepository.GetShelterCities();
+            var cities = _shelterRepository.GetShelterCities();
+            if (cities == null || !cities.Any())
+            {
+                return NotFound();
+            }
+            return Ok(cities);
         }
 
         [HttpGet]
-        public IEnumerable<Shelter> GetShelters([FromQuery] SheltersQueryModel sheltersQueryModel)
+        public IActionResult GetShelters([FromQuery] SheltersQueryModel sheltersQueryModel)
         {
-            return _shelterRepository.GetShelters(sheltersQueryModel);
+            var shelters = _shelterRepository.GetShelters(sheltersQueryModel);
+            if (shelters == null || !shelters.Any())
+            {
+                return NotFound();
+            }
+            return Ok(shelters);
         }
 
         [HttpGet("Count")]
@@ -42,9 +52,14 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public Shelter GetShelter(Guid id)
+        public IActionResult GetShelter(Guid id)
         {
-            return _shelterRepository.GetShelter(id);
+            var shelter = _shelterRepository.GetShelter(id);
+            if (shelter == null )
+            {
+                return NotFound();
+            }
+            return Ok(shelter);
         }
 
         [HttpPost]
@@ -69,9 +84,14 @@ namespace backend.Controllers
         }
 
         [HttpGet("Pets/{id}")]
-        public List<Pet> GetShelterPets(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
+        public IActionResult GetShelterPets(Guid id, [FromQuery] PetsQueryModel petsQueryModel)
         {
-            return _shelterRepository.GetShelterPets(id, petsQueryModel).ToList();
+            var pets = _shelterRepository.GetShelterPets(id, petsQueryModel).ToList();
+            if (pets == null || !pets.Any())
+            {
+                return NotFound();
+            }
+            return Ok(pets);
         }
 
         [HttpGet("Pets/{id}/Count")]
@@ -95,7 +115,12 @@ namespace backend.Controllers
         [HttpGet("{id}/photo")]
         public IActionResult GetPhotos(Guid id)
         {
-            return Ok(_fileRepository.GetShelterPhoto(id));
+            var photo = _fileRepository.GetShelterPhoto(id);
+            if (photo == null)
+            {
+                return NotFound();
+            }
+            return Ok(photo);
         }
 
         [HttpDelete("photos/{fileId}")]
